@@ -9,6 +9,8 @@ from diffusers import DDIMScheduler, DiffusionPipeline
 from torch import autocast
 from transformers import AutoTokenizer
 
+with open(f'../openai_key.txt', 'r') as file:
+    openai.api_key = file.readline()
 
 def generate_slogans(company_name, field, SEO_opt):
     base_model = "google/flan-t5-base"
@@ -28,7 +30,7 @@ def generate_slogans(company_name, field, SEO_opt):
     input_ids = input_ids.to(device)
     model_output = tokenizer.decode((model.generate(input_ids))[0])
     model_output = re.sub(r'<.*?>', '', model_output)
-    openai.api_key = "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"
+
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -81,7 +83,7 @@ def generate_banner(company_name, field):
         final_image.save(model_image_path)
 
 
-    openai.api_key = "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"
+
     response = openai.Image.create(
         prompt=prompt,
         n=1,
